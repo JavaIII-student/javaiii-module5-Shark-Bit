@@ -11,5 +11,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.apache.derby:derby:10.9.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.derby:derbyclient:10.13.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:14" level="project" />
   </component>
 </module>
