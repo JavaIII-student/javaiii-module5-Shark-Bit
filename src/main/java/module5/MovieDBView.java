@@ -10,14 +10,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class MovieDBView extends Application {
+
+    public MovieDBView() throws SQLException {
+    }
+
 
     @Override
     public void start(Stage stage) {
 
-        button.setOnAction(actionEvent -> {
-            buttonEvent();
-        });
+        button.setOnAction(actionEvent -> buttonEvent());
 
         buildMovieList();
 
@@ -42,18 +46,19 @@ public class MovieDBView extends Application {
         movieTableColumn.setCellValueFactory(new PropertyValueFactory<>("movieName"));
 
         tableView.getColumns().add(movieTableColumn);
-
     }
 
     private void buttonEvent(){
         tableView.getItems().add(new Movie("Dune"));
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         launch(args);
     }
 
     private VBox mainPane = new VBox();
     private Button button = new Button("Enter Movie");
     private TableView tableView;
+
+    private MovieDBModel movieDBModel = new MovieDBModel();
 }

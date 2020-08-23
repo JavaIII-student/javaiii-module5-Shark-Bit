@@ -1,61 +1,96 @@
 package module5;
 
+import javax.print.attribute.standard.MediaSize;
 import java.sql.*;
 
 public class MovieDBModel {
 
-
-
     public MovieDBModel() throws SQLException {
+
         createDB();
+
+        createTable();
+
+        printTables();
     }
 
-    private void createDB() throws SQLException {
+    private void createDB() {
         try{
-            connection = DriverManager.getConnection(URL);
+            this.connection = DriverManager.getConnection(URL);
         } catch (SQLException throwable) {
             throwable.printStackTrace();
         }
-    }
-
-    private void resetExampleDatabase() {
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-            System.out.println("Creating Table - This will throw an exception if the table is already created.");
-            stmt.execute("CREATE TABLE example (" + "id INTEGER PRIMARY KEY," + "name VARCHAR(255))");
-            System.out.println("adding values into example table");
-            stmt.executeUpdate("INSERT INTO example VALUES (1, 'Example Data')");
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        }
-
     }
 
     private void createTable() throws SQLException {
 
         if(connection!=null)
         {
+
+            String CREATE_TABLE_SQL = "CREATE TABLE " + TABLENAME + "("
+                    + UID + " INT NOT NULL,"
+                    + NAME + " VARCHAR(255),"
+                    + RATING + " INT NOT NULL,"
+                    + DESCRIPTION + " VARCHAR(255),"
+                    + "PRIMARY KEY (UID))";
+
+            String dropTable = "DROP TABLE " + TABLENAME;
+
             DatabaseMetaData dbmd = connection.getMetaData();
-            ResultSet rs = dbmd.getTables(null, null, sTablename.toUpperCase(),null);
-            if(rs.next())
-            {
-                System.out.println("Table "+rs.getString("TABLE_NAME")+"already exists !!");
-            }
-            else
-            {
-                System.out.println("Write your create table function here !!!");
-            }
 
+            Statement statement = connection.createStatement();
+
+            ResultSet rs = dbmd.getTables(null, null, TABLENAME.toUpperCase(), null);
+
+            if(!rs.next()) {
+
+                statement.execute(CREATE_TABLE_SQL);
+            }else{
+
+                statement.execute(dropTable);
+                statement.execute(CREATE_TABLE_SQL);
+            }
         }
-
-
     }
 
-    private static final String URL = "jdbc:derby:MoveDataBase;create=true";
+    private void printTables() throws SQLException {
+
+        DatabaseMetaData dbmd = connection.getMetaData();
+
+        Statement statement = connection.createStatement();
+
+        ResultSet rs = dbmd.getTables(null, null, TABLENAME, null);
+
+        System.out.println(rs.next());
+
+        System.out.println(rs.getString(3));
+
+        System.out.println(rs.getString("TABLE_NAME"));
+
+        statement.executeUpdate("INSERT INTO MOVIES VALUES (1, 'DUNE', 10, 'Space Sand Movie')");
+
+        statement.executeUpdate("INSERT INTO MOVIES VALUES (2, 'TRON', 9, 'CYBERPUNK PROM')");
+
+        ResultSet rs2 =  statement.executeQuery("SELECT "
+                + UID + ", "
+                + NAME +", "
+                + RATING +", "
+                + DESCRIPTION + " FROM MOVIES");
+
+        while (rs2.next()){
+            System.out.println(rs2.getString(UID));
+            System.out.println(rs2.getString(NAME));
+            System.out.println(rs2.getString(RATING));
+            System.out.println(rs2.getString(DESCRIPTION));
+        }
+    }
+
+    private final String URL = "jdbc:derby:MoveDataBase;create=true";
+    private final String TABLENAME = "MOVIES",
+            UID = "UID",
+            NAME = "NAME",
+            RATING = "RATING",
+            DESCRIPTION = "DESCRIPTION";
 
     private Connection connection;
-    private PreparedStatement selectAllExample;
-
-
 }
