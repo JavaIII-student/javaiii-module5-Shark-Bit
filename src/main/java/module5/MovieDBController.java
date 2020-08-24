@@ -1,29 +1,24 @@
 package module5;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.IntegerBinding;
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MovieDBController {
 
-    public MovieDBController() {
-
-        StringProperty stringProperty = new SimpleStringProperty();
-
-        IntegerProperty squareSide = new SimpleIntegerProperty();
-        IntegerProperty squareArea = new SimpleIntegerProperty();
-
-        NumberBinding squareBinding = Bindings.multiply(squareSide, squareArea);
-
-        squareArea.bind(squareBinding);
-
-        squareArea.bind(squareSide.multiply(squareSide));
-
-
+    public MovieDBController() throws SQLException {
     }
 
+    public void addMovie(String name, String rating, String description, MovieDBView movieDBView) throws SQLException {
+
+        movieDBModel.addMove(name, rating, description);
+
+        movieDBView.clearViewTable();
+
+        List<String[]> movies = movieDBModel.getDBMovies();
+
+        for (String[] movie : movies){
+            movieDBView.updateViewTable(movie[0], movie[1], movie[2]);
+        }
+    }
+    private final MovieDBModel movieDBModel = new MovieDBModel();
 }

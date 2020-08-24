@@ -2,6 +2,8 @@ package module5;
 
 import javax.print.attribute.standard.MediaSize;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDBModel {
 
@@ -11,7 +13,57 @@ public class MovieDBModel {
 
         createTable();
 
-        printTables();
+        //printTables();
+    }
+
+    public void addMove(String name, String rating, String description) throws SQLException {
+
+        Statement statement = connection.createStatement();
+
+        String numOfRows = "SELECT COUNT(*) AS rowcount FROM " + TABLENAME;
+        ResultSet rowCount = statement.executeQuery(numOfRows);
+        rowCount.next();
+
+        int uid = rowCount.getInt("rowcount") + 1;
+
+        //String uid = Integer.toString(count + 1);
+
+        String movieInfo = "INSERT INTO MOVIES VALUES ("
+                + uid + ", "
+                + "'" + name + "'" + ", "
+                +  Integer.parseInt(rating) + ", "
+                + "'" + description  + "'"
+                + ")";
+
+        System.out.println(movieInfo);
+
+        statement.executeUpdate(movieInfo);
+    }
+
+    public List<String[]> getDBMovies() throws SQLException {
+
+        List<String[]> moviesArray = new ArrayList<>();
+
+        Statement statement = connection.createStatement();
+
+        ResultSet rs2 =  statement.executeQuery("SELECT "
+                + UID + ", "
+                + NAME +", "
+                + RATING +", "
+                + DESCRIPTION + " FROM MOVIES");
+
+        while (rs2.next()){
+
+            String[] movie = new String[3];
+
+            movie[0] = rs2.getString(NAME);
+            movie[1] = rs2.getString(RATING);
+            movie[2] = rs2.getString(DESCRIPTION);
+
+            moviesArray.add(movie);
+        }
+
+        return moviesArray;
     }
 
     private void createDB() {
@@ -78,11 +130,20 @@ public class MovieDBModel {
                 + DESCRIPTION + " FROM MOVIES");
 
         while (rs2.next()){
-            System.out.println(rs2.getString(UID));
+
+            //System.out.println(rs2.getString(UID));
             System.out.println(rs2.getString(NAME));
             System.out.println(rs2.getString(RATING));
             System.out.println(rs2.getString(DESCRIPTION));
         }
+
+        String numOfRows = "SELECT COUNT(*) AS rowcount FROM " + TABLENAME;
+        ResultSet re3 = statement.executeQuery(numOfRows);
+
+        while (re3.next()) {
+            System.out.println(re3.getInt("rowcount"));
+        }
+
     }
 
     private final String URL = "jdbc:derby:MoveDataBase;create=true";
