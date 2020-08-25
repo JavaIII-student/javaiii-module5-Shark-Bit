@@ -8,25 +8,15 @@ import java.util.List;
 public class MovieDBModel {
 
     public MovieDBModel() throws SQLException {
-
         createDB();
-
         createTable();
-
-        //printTables();
     }
 
     public void addMove(String name, String rating, String description) throws SQLException {
 
+        int uid = new Movie(name, rating, description).hashCode();
+
         Statement statement = connection.createStatement();
-
-        String numOfRows = "SELECT COUNT(*) AS rowcount FROM " + TABLENAME;
-        ResultSet rowCount = statement.executeQuery(numOfRows);
-        rowCount.next();
-
-        int uid = rowCount.getInt("rowcount") + 1;
-
-        //String uid = Integer.toString(count + 1);
 
         String movieInfo = "INSERT INTO MOVIES VALUES ("
                 + uid + ", "
@@ -103,47 +93,6 @@ public class MovieDBModel {
                 statement.execute(CREATE_TABLE_SQL);
             }
         }
-    }
-
-    private void printTables() throws SQLException {
-
-        DatabaseMetaData dbmd = connection.getMetaData();
-
-        Statement statement = connection.createStatement();
-
-        ResultSet rs = dbmd.getTables(null, null, TABLENAME, null);
-
-        System.out.println(rs.next());
-
-        System.out.println(rs.getString(3));
-
-        System.out.println(rs.getString("TABLE_NAME"));
-
-        statement.executeUpdate("INSERT INTO MOVIES VALUES (1, 'DUNE', 10, 'Space Sand Movie')");
-
-        statement.executeUpdate("INSERT INTO MOVIES VALUES (2, 'TRON', 9, 'CYBERPUNK PROM')");
-
-        ResultSet rs2 =  statement.executeQuery("SELECT "
-                + UID + ", "
-                + NAME +", "
-                + RATING +", "
-                + DESCRIPTION + " FROM MOVIES");
-
-        while (rs2.next()){
-
-            //System.out.println(rs2.getString(UID));
-            System.out.println(rs2.getString(NAME));
-            System.out.println(rs2.getString(RATING));
-            System.out.println(rs2.getString(DESCRIPTION));
-        }
-
-        String numOfRows = "SELECT COUNT(*) AS rowcount FROM " + TABLENAME;
-        ResultSet re3 = statement.executeQuery(numOfRows);
-
-        while (re3.next()) {
-            System.out.println(re3.getInt("rowcount"));
-        }
-
     }
 
     private final String URL = "jdbc:derby:MoveDataBase;create=true";

@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -37,11 +38,13 @@ public class MovieDBView extends Application {
         mainPane.getChildren().addAll(
                 tableView,
                 new Separator(),
-                entryPane
+                entryPane,
+                new Separator(),
+                boxPane
         );
 
         stage.setTitle("MovieDB");
-        Scene scene = new Scene(mainPane,300, 500);
+        Scene scene = new Scene(mainPane,800, 500);
         stage.setScene(scene);
         stage.show();
     }
@@ -55,6 +58,10 @@ public class MovieDBView extends Application {
         topDes.setCollapsible(false);
         topDes.setText("Description");
 
+        inputName.setPrefWidth(100);
+        inputRating.setPrefWidth(50);
+        inputDes.setPrefWidth(400);
+
         entryPane.getChildren().addAll(
                 topName,
                 inputName,
@@ -63,19 +70,24 @@ public class MovieDBView extends Application {
                 inputRating,
                 new Separator(),
                 topDes,
-                inputDes,
+                inputDes
+        );
+        entryPane.setAlignment(Pos.CENTER);
+
+        boxPane.getChildren().addAll(
                 button
         );
+        boxPane.setAlignment(Pos.CENTER);
 
 
-        entryPane.setAlignment(Pos.CENTER);
-        entryPane.setColumnHalignment(HPos.CENTER);
-        entryPane.setRowValignment(VPos.CENTER);
-        entryPane.setPadding(new Insets(5,0,5,0));
-        entryPane.setVgap(4);
-        entryPane.setHgap(4);
-        entryPane.setPrefWrapLength(5);
-        entryPane.setStyle("-fx-background-color: DAE6F3;");
+//        entryPane.setAlignment(Pos.CENTER);
+//        entryPane.setColumnHalignment(HPos.CENTER);
+//        entryPane.setRowValignment(VPos.CENTER);
+//        entryPane.setPadding(new Insets(5,0,5,0));
+//        entryPane.setVgap(4);
+//        entryPane.setHgap(4);
+//        entryPane.setPrefWrapLength(5);
+//        entryPane.setStyle("-fx-background-color: DAE6F3;");
 
 
         tableView = new TableView<>();
@@ -92,6 +104,14 @@ public class MovieDBView extends Application {
         desTableColumn.setCellValueFactory(new PropertyValueFactory<>("movieDes"));
         tableView.getColumns().add(desTableColumn);
 
+        movieTableColumn.setPrefWidth(100);
+        ratingTableColumn.setPrefWidth(50);
+        desTableColumn.setPrefWidth(400);
+//
+//        movieTableColumn.prefWidthProperty().bind(movieTableColumn.widthProperty().divide(4)); // w * 1/4
+//        ratingTableColumn.prefWidthProperty().bind(movieTableColumn.widthProperty().divide(2)); // w * 1/2
+//        desTableColumn.prefWidthProperty().bind(movieTableColumn.widthProperty().divide(4)); // w * 1/4
+//
 
         button.setOnAction(actionEvent -> {
             try {
@@ -115,13 +135,15 @@ public class MovieDBView extends Application {
 
     private final VBox mainPane = new VBox();
 
-    private final FlowPane entryPane = new FlowPane(Orientation.HORIZONTAL, 10, 10);
+    private final HBox entryPane = new HBox();
+    private final HBox boxPane = new HBox();
     private final Button button = new Button("Enter Movie");
     private TableView tableView;
 
     final private TitledPane topName = new TitledPane(),
             topRating = new TitledPane(),
             topDes = new TitledPane();
+
     final private TextField inputName = new TextField(),
             inputRating = new TextField(),
             inputDes = new TextField();
